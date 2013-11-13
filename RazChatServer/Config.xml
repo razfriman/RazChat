@@ -1,0 +1,6 @@
+<Config>
+	<Build>1</Build>
+	<Port>8484</Port>
+	<ExternalAddress>192.168.0.2</ExternalAddress>
+	<WelcomeMessage>Welcome to Raz's Chat Server</WelcomeMessage>
+</Config>

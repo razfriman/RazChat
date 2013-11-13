@@ -1,0 +1,25 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../Desktop/chronicle-emulator-read-only/Chronicle/Network/PacketHandlerAttribute.cs">
+    <Files>
+      <File FileName="RazChatServer/Server.cs" Line="36" Column="4" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Server.cs" Line="24" Column="67" />
+      <File FileName="RazChatServer/Config.cs" Line="19" Column="25" />
+      <File FileName="RazChatServer/Utility/LockFreeQueue.cs" Line="27" Column="20" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Utility/LockFreeQueue.cs" Line="100" Column="1" />
+      <File FileName="RazChatServer/Network/Client.cs" Line="131" Column="4" />
+      <File FileName="RazChatServer/Log.cs" Line="9" Column="1" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Utility/InitializerAttribute.cs" Line="14" Column="1" />
+      <File FileName="RazChatServer/Utility/InitializerAttribute.cs" Line="3" Column="32" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Utility/Reflector.cs" Line="7" Column="5" />
+      <File FileName="RazChatServer/Utility/Reflector.cs" Line="28" Column="28" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Network/EOpcode.cs" Line="1" Column="1" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Network/Packet.cs" Line="1" Column="1" />
+      <File FileName="../../Desktop/chronicle-emulator-read-only/Chronicle/Network/PacketHandlerAttribute.cs" Line="10" Column="42" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
