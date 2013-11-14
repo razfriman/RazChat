@@ -14,6 +14,7 @@ namespace RazChat.ConsoleClient
 			pPacket.ReadString (out message);
 
 			Log.WriteLine (ELogLevel.Info, "Welcome Message: {0}", message);
+			Client.sServer.WelcomeMessage = message;
 		}
 
 		[PacketHandler(EOpcode.SMSG_CHAT_MESSAGE)]

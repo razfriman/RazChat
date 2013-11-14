@@ -58,8 +58,12 @@ namespace RazChat.Server
 			return true;
 		}
 
-		internal static void SendPacketToAllExcept(Packet pPacket, Client pExcept) { sClients.ForEach(p => { if (p != pExcept) p.SendPacket(pPacket); }); }
-		internal static void SendPacketToAll(Packet pPacket) { sClients.ForEach(p => p.SendPacket(pPacket)); }
+		internal static void SendPacketToAllExcept(Packet pPacket, Client pExcept) { 
+			sClients.ForEach(p => { if (p != pExcept) p.SendPacket(pPacket); });
+		}
+		internal static void SendPacketToAll(Packet pPacket) { 
+			sClients.ForEach(p => p.SendPacket(pPacket));
+		}
 
 		internal static void SendUniqueName(Client pClient) {
 			Packet packet = new Packet(EOpcode.SMSG_UPDATE_USERNAME);

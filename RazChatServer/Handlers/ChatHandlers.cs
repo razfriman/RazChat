@@ -13,14 +13,12 @@ namespace RazChat.Server.Handlers
 			string message;
 			pPacket.ReadString (out message);
 
-			Log.WriteLine (ELogLevel.Info, "CHAT: {0}", message);
+			Log.WriteLine (ELogLevel.Info, "[Server] Received Chat Message: {0}", message);
 
 			Packet packet = new Packet(EOpcode.SMSG_CHAT_MESSAGE);
 			packet.WriteString (pClient.Username);
 			packet.WriteString(message);
 			Server.SendPacketToAllExcept (packet, pClient);
-
-
 		}
 	}
 }

@@ -34,8 +34,10 @@ namespace RazChat.ConsoleClient.Network
 		private LockFreeQueue<ByteArraySegment> mSendSegments = new LockFreeQueue<ByteArraySegment>();
 		private int mSending = 0;
 		private ushort mReceivingPacketLength = 0;
+		private bool mReceivedHandshakePacket = false;
 
 		private string mHost = null;
+		private string mWelcomeMessage = "";
 
 		public Server(Socket pSocket)
 		{
@@ -47,6 +49,7 @@ namespace RazChat.ConsoleClient.Network
 		}
 
 		public string Host { get { return mHost; } }
+		public string WelcomeMessage { get { return mWelcomeMessage; } set { mWelcomeMessage = value; } }
 
 		public void Disconnect()
 		{
@@ -101,8 +104,10 @@ namespace RazChat.ConsoleClient.Network
 				}
 				if (mReceivingPacketLength > 0 && mReceiveLength >= mReceivingPacketLength + 4)
 				{
-					if (mReceiveStart == 0) {
+					if (!mReceivedHandshakePacket && mReceiveStart == 0) {
 						// Handshake packet
+						mReceivedHandshakePacket = true;
+
 						Packet packet = new Packet(mReceiveBuffer, mReceiveStart + 4, mReceivingPacketLength, false);
 						ushort build;
 						packet.ReadUShort (out build);

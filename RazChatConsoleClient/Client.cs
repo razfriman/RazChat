@@ -8,14 +8,18 @@ using System.Threading;
 using RazChat.ConsoleClient.Network;
 using RazChat.Shared;
 using RazChat.Shared.Network;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace RazChat.ConsoleClient
 {
 	internal static class Client
 	{
 		private static LockFreeQueue<Callback> sCallbacks = new LockFreeQueue<Callback>();
-		private static Socket sListener;
-		private static Server sServer;
+		private static Socket sServerSocket;
+		private static int sRetryCount = 0;
+
+		internal static Server sServer;
 
 		public static void Main (string[] args)
 		{
@@ -25,6 +29,44 @@ namespace RazChat.ConsoleClient
 			Config.Load();
 
 			if (!Initialize()) return;
+
+			Task.Factory.StartNew (HandleCallbacksAsync);
+
+			while (true)
+			{
+				string line = Console.ReadLine ();
+
+				if (string.IsNullOrWhiteSpace (line)) {
+					continue;
+				}
+
+				if (line.StartsWith ("/")) {
+					HandleCommand (line);
+				} else {
+					if (sServerSocket.Connected) {
+						SendMessage (line);
+					}
+				}
+			}
+		}
+
+		private static void HandleCommand(string pInput) {
+			List<string> splitted = pInput.Substring (1).Split (new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList ();
+
+			if (splitted.Count == 0) {
+				return;
+			}
+
+			string commandName = splitted [0];
+
+			switch (commandName) {
+			case "welcome":
+				Log.WriteLine (ELogLevel.Info, "Welcome Message: {0}", sServer.WelcomeMessage);
+				break;
+			}
+		}
+
+		public static void HandleCallbacksAsync() {
 
 			Callback callback;
 
@@ -37,6 +79,12 @@ namespace RazChat.ConsoleClient
 
 		internal static string Version { get { return Assembly.GetEntryAssembly().GetName().Version.ToString(); } }
 
+		public static void SendMessage(string pMessage) {
+			Packet packet = new Packet (EOpcode.CMSG_CHAT_MESSAGE);
+			packet.WriteString (pMessage);
+			sServer.SendPacket (packet);
+		}
+
 		public static void AddCallback(Callback pCallback) { sCallbacks.Enqueue(pCallback); }
 
 		private static bool Initialize()
@@ -46,28 +94,37 @@ namespace RazChat.ConsoleClient
 			initializers.Sort((p1, p2) => p1.Item1.Stage.CompareTo(p2.Item1.Stage));
 			if (!initializers.TrueForAll(p => p.Item2())) return false;
 
-			sListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			sServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
 			Log.WriteLine(ELogLevel.Info, "[Client] Connecting to Server");
 
-			sListener.BeginConnect("localhost",8484, new AsyncCallback(ConnectCallback), null);
+			sServerSocket.BeginConnect("localhost",8484, new AsyncCallback(ConnectCallback), null);
 
 			return true;
 		}
 
 		private static void ConnectCallback(IAsyncResult ar) {
 			try {
-				sListener.EndConnect (ar);
+				sServerSocket.EndConnect (ar);
 				Log.WriteLine(ELogLevel.Info, "[Client] Connected to Server");
 
-				Server server = new Server(sListener);
+				sServer = new Server(sServerSocket);
 
 				Packet p = new Packet(EOpcode.CMSG_CHAT_MESSAGE);
 				p.WriteString("Hello");
-				server.SendPacket(p);
+				sServer.SendPacket(p);
 
 			} catch (Exception e) {
-				Log.WriteLine(ELogLevel.Exception, "[Client] Could not connect to server: {0}", e.ToString());
+				sRetryCount++;
+				Log.WriteLine(ELogLevel.Info, "[Client] Could not connect to server: {0}", e.Message);
+
+				if (sRetryCount < 3) {
+					Log.WriteLine (ELogLevel.Info, "[Client] Reattempting to connect to server");
+					Thread.Sleep (1000);
+					sServerSocket.BeginConnect ("localhost", 8484, new AsyncCallback (ConnectCallback), null);
+				} else {
+					Log.WriteLine (ELogLevel.Error, "[Client] Cannot connect to server");
+				}
 			}
 		}
 
