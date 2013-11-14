@@ -27,6 +27,6 @@ Global
 		{E6BAC495-1AD2-457B-BFFB-F8873ACC37B9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = RazChatServer\RazChatServer.csproj
+		StartupItem = RazChatConsoleClient\RazChatConsoleClient.csproj
 	EndGlobalSection
 EndGlobal

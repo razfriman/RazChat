@@ -18,13 +18,17 @@ namespace RazChat.Shared.Network
 			mOpcode = pOpcode;
 			WriteUShort((ushort)pOpcode);
 		}
-		public Packet(byte[] pData, int pStart, int pLength)
+
+		public Packet(byte[] pData, int pStart, int pLength, bool pReadOpcode = true)
 		{
 			mBuffer = new byte[pLength];
 			WriteBytes(pData, pStart, pLength);
-			ushort opcode;
-			ReadUShort(out opcode);
-			mOpcode = (EOpcode)opcode;
+
+			if (pReadOpcode) {
+				ushort opcode;
+				ReadUShort (out opcode);
+				mOpcode = (EOpcode)opcode;
+			}
 		}
 
 		public EOpcode Opcode { get { return mOpcode; } }
@@ -135,8 +139,12 @@ namespace RazChat.Shared.Network
 		}
 		public void WriteString(string pValue)
 		{
-			WriteUShort((ushort)pValue.Length);
-			WriteBytes(Encoding.ASCII.GetBytes(pValue));
+			if (!string.IsNullOrEmpty (pValue)) {
+				WriteUShort ((ushort)pValue.Length);
+				WriteBytes (Encoding.ASCII.GetBytes (pValue));
+			} else {
+				WriteUShort (0);
+			}
 		}
 		public void WritePaddedString(string pValue, int pLength)
 		{

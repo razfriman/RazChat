@@ -16,7 +16,7 @@ namespace RazChat.Server.Handlers
 			Log.WriteLine (ELogLevel.Info, "CHAT: {0}", message);
 
 			Packet packet = new Packet(EOpcode.SMSG_CHAT_MESSAGE);
-			packet.WriteInt(pClient.Identifier);
+			packet.WriteString (pClient.Username);
 			packet.WriteString(message);
 			Server.SendPacketToAllExcept (packet, pClient);
 

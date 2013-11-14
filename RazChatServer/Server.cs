@@ -73,7 +73,7 @@ namespace RazChat.Server
 			pClient.SendPacket (packet);
 		}
 
-		internal static void ClientConnected(Client pClient) { 
+		internal static void ClientConnected(Client pClient) {
 			SendUniqueName (pClient);
 			SendWelcomeMessage (pClient);
 		}

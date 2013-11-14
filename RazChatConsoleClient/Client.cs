@@ -4,9 +4,10 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
+using RazChat.ConsoleClient.Network;
 using RazChat.Shared;
 using RazChat.Shared.Network;
-using System.Threading;
 
 namespace RazChat.ConsoleClient
 {
@@ -14,12 +15,14 @@ namespace RazChat.ConsoleClient
 	{
 		private static LockFreeQueue<Callback> sCallbacks = new LockFreeQueue<Callback>();
 		private static Socket sListener;
-		private static RazChat.ConsoleClient.Network.Server sServer;
+		private static Server sServer;
 
 		public static void Main (string[] args)
 		{
 			Console.Title = "Raz Chat Console Client " + Version;
 			Console.SetWindowSize(128, 64);
+
+			Config.Load();
 
 			if (!Initialize()) return;
 
@@ -45,9 +48,9 @@ namespace RazChat.ConsoleClient
 
 			sListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-			sListener.BeginConnect("localhost",8484, new AsyncCallback(ConnectCallback), null);
-
 			Log.WriteLine(ELogLevel.Info, "[Client] Connecting to Server");
+
+			sListener.BeginConnect("localhost",8484, new AsyncCallback(ConnectCallback), null);
 
 			return true;
 		}
@@ -55,9 +58,16 @@ namespace RazChat.ConsoleClient
 		private static void ConnectCallback(IAsyncResult ar) {
 			try {
 				sListener.EndConnect (ar);
-				Console.WriteLine ("Socket connected");
+				Log.WriteLine(ELogLevel.Info, "[Client] Connected to Server");
+
+				Server server = new Server(sListener);
+
+				Packet p = new Packet(EOpcode.CMSG_CHAT_MESSAGE);
+				p.WriteString("Hello");
+				server.SendPacket(p);
+
 			} catch (Exception e) {
-				Console.WriteLine (e.ToString ());
+				Log.WriteLine(ELogLevel.Exception, "[Client] Could not connect to server: {0}", e.ToString());
 			}
 		}
 

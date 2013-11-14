@@ -45,6 +45,7 @@ namespace RazChat.Server.Network
 			mReceiveBuffer = new byte[MAX_RECEIVE_BUFFER];
 			mHost = ((IPEndPoint)mSocket.RemoteEndPoint).Address.ToString();
 			mIdentifier = pIdentifier;
+			mUsername = "USER_" + pIdentifier;
 			Log.WriteLine(ELogLevel.Debug, "[{0}] Connected", Host);
 			BeginReceive();
 		}
@@ -140,9 +141,14 @@ namespace RazChat.Server.Network
 
 		internal void SendHandshake(ushort pBuild)
 		{
-			byte[] buffer = new byte[2];
-			buffer[0] = (byte)pBuild;
-			buffer[1] = (byte)(pBuild >> 8);
+			byte[] buffer = new byte[6];
+			buffer [0] = (byte)0x02;
+			buffer [1] = 0;
+			buffer [2] = 0;
+			buffer [3] = 0;
+
+			buffer [4] = (byte)pBuild;
+			buffer [5] = (byte)(pBuild >> 8);
 			Send(buffer);
 		}
 
@@ -155,7 +161,6 @@ namespace RazChat.Server.Network
 
 		public void GenerateHeader(byte[] pBuffer, int pLength)
 		{
-			// & 0xFF
 			pBuffer[0] = (byte)pLength;
 			pBuffer[1] = (byte)(pLength >> 8);
 			pBuffer[2] = (byte)(pLength >> 16);

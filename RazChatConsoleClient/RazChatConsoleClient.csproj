@@ -40,6 +40,7 @@
     <Compile Include="Network\PacketHandlerAttribute.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Handlers\ChatHandlers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -50,10 +51,6 @@
     <ProjectReference Include="..\RazChat.Shared\RazChat.Shared.csproj">
       <Project>{321D4909-896F-4B61-97BB-8A1F506BC132}</Project>
       <Name>RazChat.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RazChatServer\RazChatServer.csproj">
-      <Project>{E6BAC495-1AD2-457B-BFFB-F8873ACC37B9}</Project>
-      <Name>RazChatServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

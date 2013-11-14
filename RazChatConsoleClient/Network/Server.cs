@@ -18,7 +18,7 @@ namespace RazChat.ConsoleClient.Network
 		{
 			List<Tuple<PacketHandlerAttribute, PacketProcessor>> handlers = Reflector.FindAllMethods<PacketHandlerAttribute, PacketProcessor>();
 			handlers.ForEach(d => { d.Item1.Processor = d.Item2; sHandlers.Add(d.Item1.Opcode, d.Item1); });
-			Log.WriteLine(ELogLevel.Info, "[Server] Initialized {0} Packet Handlers", sHandlers.Count);
+			Log.WriteLine(ELogLevel.Info, "[Client] Initialized {0} Server Packet Handlers", sHandlers.Count);
 			return true;
 		}
 
@@ -101,13 +101,26 @@ namespace RazChat.ConsoleClient.Network
 				}
 				if (mReceivingPacketLength > 0 && mReceiveLength >= mReceivingPacketLength + 4)
 				{
-					Packet packet = new Packet(mReceiveBuffer, mReceiveStart + 4, mReceivingPacketLength);
-					PacketHandlerAttribute handler = sHandlers.GetOrDefault(packet.Opcode, null);
-					if (handler != null) Client.AddCallback(() => handler.Processor(packet));
-					else
-					{
-						Log.WriteLine(ELogLevel.Debug, "[{0}] Receiving 0x{1}, {2} Bytes", Host, ((ushort)packet.Opcode).ToString("X4"), packet.Length);
-						packet.Dump();
+					if (mReceiveStart == 0) {
+						// Handshake packet
+						Packet packet = new Packet(mReceiveBuffer, mReceiveStart + 4, mReceivingPacketLength, false);
+						ushort build;
+						packet.ReadUShort (out build);
+
+						if (build != Config.Instance.Build) {
+							Log.WriteLine (ELogLevel.Warn, "[Client] Build version mismatch. Disconnecting from server");
+							Disconnect ();
+						}
+
+					} else {
+						Packet packet = new Packet(mReceiveBuffer, mReceiveStart + 4, mReceivingPacketLength);
+						PacketHandlerAttribute handler = sHandlers.GetOrDefault (packet.Opcode, null);
+						if (handler != null)
+							Client.AddCallback (() => handler.Processor (packet));
+						else {
+							Log.WriteLine (ELogLevel.Debug, "[{0}] Receiving 0x{1}, {2} Bytes", Host, ((ushort)packet.Opcode).ToString ("X4"), packet.Length);
+							packet.Dump ();
+						}
 					}
 
 					mReceiveStart += mReceivingPacketLength + 4;
@@ -140,7 +153,6 @@ namespace RazChat.ConsoleClient.Network
 
 		public void GenerateHeader(byte[] pBuffer, int pLength)
 		{
-			// & 0xFF
 			pBuffer[0] = (byte)pLength;
 			pBuffer[1] = (byte)(pLength >> 8);
 			pBuffer[2] = (byte)(pLength >> 16);

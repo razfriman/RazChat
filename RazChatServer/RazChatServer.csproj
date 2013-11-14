@@ -44,7 +44,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Utility\" />
     <Folder Include="Network\" />
     <Folder Include="Handlers\" />
   </ItemGroup>
