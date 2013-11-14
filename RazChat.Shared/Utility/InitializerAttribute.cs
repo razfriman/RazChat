@@ -1,6 +1,6 @@
 using System;
 
-namespace RazChat.Server.Utility
+namespace RazChat.Shared.Utility
 {
 	public delegate bool InitializerCallback();
 

@@ -39,6 +39,8 @@
     <Compile Include="Utility\Reflector.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Utility\InitializerAttribute.cs" />
+    <Compile Include="Utility\LockFreeQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace RazChat.Server.Utility
+namespace RazChat.Shared.Utility
 {
 	public sealed class LockFreeQueue<T> where T : class
 	{

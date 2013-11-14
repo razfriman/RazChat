@@ -7,9 +7,9 @@ using System.Net;
 using System.Threading;
 using RazChat.Shared;
 
-namespace RazChat.Server.Network
+namespace RazChat.ConsoleClient.Network
 {
-	public sealed class Client
+	public sealed class Server
 	{
 		private static Dictionary<EOpcode, PacketHandlerAttribute> sHandlers = new Dictionary<EOpcode, PacketHandlerAttribute>();
 
@@ -18,7 +18,7 @@ namespace RazChat.Server.Network
 		{
 			List<Tuple<PacketHandlerAttribute, PacketProcessor>> handlers = Reflector.FindAllMethods<PacketHandlerAttribute, PacketProcessor>();
 			handlers.ForEach(d => { d.Item1.Processor = d.Item2; sHandlers.Add(d.Item1.Opcode, d.Item1); });
-			Log.WriteLine(ELogLevel.Info, "[Server] Initialized {0} Client Packet Handlers", sHandlers.Count);
+			Log.WriteLine(ELogLevel.Info, "[Server] Initialized {0} Packet Handlers", sHandlers.Count);
 			return true;
 		}
 
@@ -36,22 +36,17 @@ namespace RazChat.Server.Network
 		private ushort mReceivingPacketLength = 0;
 
 		private string mHost = null;
-		private int mIdentifier = 0;
-		private string mUsername = null;
 
-		public Client(Socket pSocket, int pIdentifier)
+		public Server(Socket pSocket)
 		{
 			mSocket = pSocket;
 			mReceiveBuffer = new byte[MAX_RECEIVE_BUFFER];
 			mHost = ((IPEndPoint)mSocket.RemoteEndPoint).Address.ToString();
-			mIdentifier = pIdentifier;
 			Log.WriteLine(ELogLevel.Debug, "[{0}] Connected", Host);
 			BeginReceive();
 		}
 
 		public string Host { get { return mHost; } }
-		public int Identifier { get { return mIdentifier; } }
-		public string Username { get { return mUsername; } }
 
 		public void Disconnect()
 		{
@@ -61,10 +56,8 @@ namespace RazChat.Server.Network
 					mSocket.Shutdown(SocketShutdown.Both);
 					mSocket.Close();
 					Log.WriteLine(ELogLevel.Debug, "[{0}] Disconnected", Host);
-					Server.ClientDisconnected(this);
 				} catch (SocketException se) {
 					Log.WriteLine(ELogLevel.Debug, "[{0}] Disconnected", Host);
-					Server.ClientDisconnected(this);
 				}
 			}
 		}
@@ -110,7 +103,7 @@ namespace RazChat.Server.Network
 				{
 					Packet packet = new Packet(mReceiveBuffer, mReceiveStart + 4, mReceivingPacketLength);
 					PacketHandlerAttribute handler = sHandlers.GetOrDefault(packet.Opcode, null);
-					if (handler != null) Server.AddCallback(() => handler.Processor(this, packet));
+					if (handler != null) Client.AddCallback(() => handler.Processor(packet));
 					else
 					{
 						Log.WriteLine(ELogLevel.Debug, "[{0}] Receiving 0x{1}, {2} Bytes", Host, ((ushort)packet.Opcode).ToString("X4"), packet.Length);
@@ -136,14 +129,6 @@ namespace RazChat.Server.Network
 				Disconnect();
 			}
 			else BeginReceive();
-		}
-
-		internal void SendHandshake(ushort pBuild)
-		{
-			byte[] buffer = new byte[2];
-			buffer[0] = (byte)pBuild;
-			buffer[1] = (byte)(pBuild >> 8);
-			Send(buffer);
 		}
 
 		private void Send(byte[] pBuffer)

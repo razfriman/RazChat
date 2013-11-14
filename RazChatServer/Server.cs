@@ -3,7 +3,6 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.IO;
-using RazChat.Server.Utility;
 using RazChat.Server.Network;
 using RazChat.Shared.Network;
 using RazChat.Shared.Utility;
