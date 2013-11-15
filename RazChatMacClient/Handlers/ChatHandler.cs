@@ -42,7 +42,7 @@ namespace RazChat.MacClient.Handlers
 
 			pPacket.ReadString (out username);
 
-			// TODO: SET USERNAME HERE
+			Client.sUsername = username;
 
 			Client.window.InvokeOnMainThread (() => {
 				Client.window.AddLineToChatHistory (string.Format ("Username: {0}", username));

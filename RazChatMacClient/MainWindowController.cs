@@ -65,7 +65,7 @@ namespace RazChatMacClient
 					HandleCommand (line);
 				} else {
 
-					AddLineToChatHistory(line);
+					AddLineToChatHistory(String.Format("{0}: {1}", Client.sUsername,line));
 
 					Client.SendMessage(line);
 				}
@@ -80,7 +80,7 @@ namespace RazChatMacClient
 			textView.ScrollRangeToVisible(new NSRange(textView.TextStorage.ToString().Length, 0));
 		}
 
-		private static void HandleCommand(string pInput) {
+		private void HandleCommand(string pInput) {
 			List<string> splitted = pInput.Substring (1).Split (new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList ();
 
 			if (splitted.Count == 0) {
@@ -91,7 +91,10 @@ namespace RazChatMacClient
 
 			switch (commandName) {
 			case "welcome":
-				//Log.WriteLine (ELogLevel.Info, "Welcome Message: {0}", sServer.WelcomeMessage);
+				AddLineToChatHistory(Client.sServer.WelcomeMessage);
+				break;
+			case "help":
+				AddLineToChatHistory("/welcome = display the welcome message");
 				break;
 			}
 		}

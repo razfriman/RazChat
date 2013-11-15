@@ -23,6 +23,8 @@ namespace RazChat.MacClient
 		internal static MainWindowController window;
 		internal static Server sServer;
 
+		internal static string sUsername = "";
+
 		private static Callback callback;
 
 		public static void Load ()
