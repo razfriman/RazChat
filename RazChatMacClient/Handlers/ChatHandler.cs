@@ -1,9 +1,9 @@
 using System;
-using RazChat.ConsoleClient.Network;
+using RazChat.MacClient.Network;
 using RazChat.Shared.Network;
 using RazChat.Shared;
 
-namespace RazChat.ConsoleClient.Handlers
+namespace RazChat.MacClient.Handlers
 {
 	internal sealed class ChatHandlers
 	{
@@ -13,8 +13,12 @@ namespace RazChat.ConsoleClient.Handlers
 			string message;
 			pPacket.ReadString (out message);
 
-			Log.WriteLine (ELogLevel.Info, "Welcome Message: {0}", message);
+
 			Client.sServer.WelcomeMessage = message;
+
+			Client.window.InvokeOnMainThread (() => {
+				Client.window.AddLineToChatHistory (string.Format ("Welcome Message: {0}", message));
+			});
 		}
 
 		[PacketHandler(EOpcode.SMSG_CHAT_MESSAGE)]
@@ -26,7 +30,9 @@ namespace RazChat.ConsoleClient.Handlers
 			pPacket.ReadString (out senderName);
 			pPacket.ReadString (out message);
 
-			Log.WriteLine (ELogLevel.Info, "Chat Message: {0} - {1}", senderName, message);
+			Client.window.InvokeOnMainThread (() => {
+				Client.window.AddLineToChatHistory (string.Format ("{0}: {1}", senderName, message));
+			});
 		}
 
 		[PacketHandler(EOpcode.SMSG_UPDATE_USERNAME)]
@@ -36,7 +42,11 @@ namespace RazChat.ConsoleClient.Handlers
 
 			pPacket.ReadString (out username);
 
-			Log.WriteLine (ELogLevel.Info, "Username: {0}", username);
+			// TODO: SET USERNAME HERE
+
+			Client.window.InvokeOnMainThread (() => {
+				Client.window.AddLineToChatHistory (string.Format ("Username: {0}", username));
+			});
 		}
 	}
 }

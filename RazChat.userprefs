@@ -1,20 +1,12 @@
-﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="RazChatServer/Handlers/ChatHandlers.cs">
+﻿<Properties GitUserInfo="UsingGIT" MonoDevelop.MonoMac.LastXamMacNagTime="11/15/2013 2:24:34 AM">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="RazChatMacClient/Handlers/ChatHandler.cs">
     <Files>
-      <File FileName="RazChatServer/Config.cs" Line="1" Column="1" />
-      <File FileName="RazChatServer/Config.xml" Line="1" Column="1" />
-      <File FileName="RazChatServer/Network/PacketHandlerAttribute.cs" Line="1" Column="1" />
-      <File FileName="RazChatServer/Network/Client.cs" Line="172" Column="1" />
-      <File FileName="RazChatServer/Handlers/ChatHandlers.cs" Line="9" Column="3" />
-      <File FileName="RazChatConsoleClient/Config.xml" Line="1" Column="1" />
-      <File FileName="RazChatConsoleClient/Config.cs" Line="1" Column="1" />
-      <File FileName="RazChatConsoleClient/Client.cs" Line="1" Column="1" />
-      <File FileName="RazChatConsoleClient/Network/PacketHandlerAttribute.cs" Line="1" Column="1" />
-      <File FileName="RazChatConsoleClient/Network/Server.cs" Line="1" Column="1" />
-      <File FileName="RazChatConsoleClient/Handlers/ChatHandlers.cs" Line="1" Column="1" />
-      <File FileName="RazChat.Shared/Network/Packet.cs" Line="1" Column="1" />
-      <File FileName="RazChatServer/Server.cs" Line="65" Column="31" />
+      <File FileName="RazChatMacClient/MainWindowController.cs" Line="35" Column="25" />
+      <File FileName="RazChatMacClient/Client.cs" Line="45" Column="1" />
+      <File FileName="RazChatMacClient/Handlers/ChatHandler.cs" Line="45" Column="13" />
+      <File FileName="RazChatMacClient/Main.cs" Line="14" Column="1" />
+      <File FileName="RazChatMacClient/Network/Server.cs" Line="124" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
