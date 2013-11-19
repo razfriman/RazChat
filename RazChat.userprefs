@@ -1,15 +1,19 @@
-﻿<Properties GitUserInfo="UsingGIT" MonoDevelop.MonoMac.LastXamMacNagTime="11/15/2013 7:38:13 PM">
+﻿<Properties GitUserInfo="UsingGIT" MonoDevelop.MonoMac.LastXamMacNagTime="11/19/2013 2:05:26 PM">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="RazChatMacClient/MainWindowController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="RazChatServer/Server.cs">
     <Files>
-      <File FileName="RazChatMacClient/MainWindowController.cs" Line="68" Column="77" />
-      <File FileName="RazChatMacClient/Client.cs" Line="26" Column="35" />
-      <File FileName="RazChatMacClient/Handlers/ChatHandler.cs" Line="45" Column="32" />
+      <File FileName="RazChatMacClient/MainWindowController.cs" Line="1" Column="1" />
+      <File FileName="RazChatMacClient/Client.cs" Line="1" Column="1" />
+      <File FileName="RazChatMacClient/Handlers/ChatHandler.cs" Line="17" Column="18" />
       <File FileName="RazChatMacClient/Main.cs" Line="1" Column="1" />
       <File FileName="RazChatMacClient/Network/Server.cs" Line="1" Column="1" />
       <File FileName="RazChatMacClient/Config.cs" Line="1" Column="1" />
-      <File FileName="RazChatServer/Config.cs" Line="28" Column="2" />
+      <File FileName="RazChatServer/Config.cs" Line="1" Column="1" />
       <File FileName="RazChatMacClient/MainWindow.cs" Line="1" Column="1" />
+      <File FileName="RazChatServer/Handlers/ChatHandlers.cs" Line="24" Column="48" />
+      <File FileName="RazChatServer/Server.cs" Line="98" Column="8" />
+      <File FileName="RazChatServer/Network/Client.cs" Line="1" Column="1" />
+      <File FileName="RazChat.Shared/Network/NetworkHost.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

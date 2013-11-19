@@ -93,8 +93,16 @@ namespace RazChatMacClient
 			case "welcome":
 				AddLineToChatHistory(Client.sServer.WelcomeMessage);
 				break;
+			case "nick":
+				if (splitted.Count > 1) {
+					Client.updateUsername (splitted [1]);
+				} else {
+					AddLineToChatHistory ("The correct syntax is /nick <username>");
+				}
+				break;
 			case "help":
 				AddLineToChatHistory("/welcome = display the welcome message");
+				AddLineToChatHistory("/nick <username> = change your username");
 				break;
 			}
 		}

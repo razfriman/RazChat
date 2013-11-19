@@ -9,7 +9,7 @@ namespace RazChat.Shared.Network
 		SMSG_UPDATE_USERNAME            = 0x0003,
 
 		CMSG_CHAT_MESSAGE               = 0x0001,
-		CMSG_X                          = 0x0002,
+		CMSG_UPDATE_USERNAME            = 0x0002,
 
 
 		MSG_NONE                        = 0xFFFF

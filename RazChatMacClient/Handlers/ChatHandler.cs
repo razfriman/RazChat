@@ -38,15 +38,23 @@ namespace RazChat.MacClient.Handlers
 		[PacketHandler(EOpcode.SMSG_UPDATE_USERNAME)]
 		public static void UpdateUsername(Packet pPacket)
 		{
+			bool success = false;
 			string username;
 
-			pPacket.ReadString (out username);
+			pPacket.ReadBool (out success);
 
-			Client.sUsername = username;
+			if (success) {
+				pPacket.ReadString (out username);
+				Client.sUsername = username;
 
-			Client.window.InvokeOnMainThread (() => {
-				Client.window.AddLineToChatHistory (string.Format ("Username: {0}", username));
-			});
+				Client.window.InvokeOnMainThread (() => {
+					Client.window.AddLineToChatHistory (string.Format ("Username: {0}", username));
+				});
+			} else {
+				Client.window.InvokeOnMainThread (() => {
+					Client.window.AddLineToChatHistory (string.Format ("Cannot update username"));
+				});
+			}
 		}
 	}
 }

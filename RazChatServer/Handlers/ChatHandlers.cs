@@ -20,6 +20,16 @@ namespace RazChat.Server.Handlers
 			packet.WriteString(message);
 			Server.SendPacketToAllExcept (packet, pClient);
 		}
+
+		[PacketHandler(EOpcode.CMSG_UPDATE_USERNAME)]
+		public static void UsernameChange(Client pClient, Packet pPacket) {
+			string username;
+			pPacket.ReadString (out username);
+
+			Log.WriteLine (ELogLevel.Info, "[Server] Username change request recevied: {0} -> {1}", pClient.Username, username);
+
+			Server.UpdateUsername (pClient, username);
+		}
 	}
 }
 

@@ -41,6 +41,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Utility\InitializerAttribute.cs" />
     <Compile Include="Utility\LockFreeQueue.cs" />
+    <Compile Include="Network\NetworkHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

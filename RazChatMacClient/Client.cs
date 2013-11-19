@@ -52,6 +52,12 @@ namespace RazChat.MacClient
 			}
 		}
 
+		internal static void updateUsername(string pUsername) {
+			Packet packet = new Packet (EOpcode.CMSG_UPDATE_USERNAME);
+			packet.WriteString (pUsername);
+			sServer.SendPacket (packet);
+		}
+
 		internal static string Version { get { return Assembly.GetEntryAssembly().GetName().Version.ToString(); } }
 
 		public static void SendMessage(string pMessage) {

@@ -9,6 +9,7 @@ using RazChat.Shared.Utility;
 using System.Net;
 using System.Reflection;
 using RazChat.Shared;
+using System.Linq;
 
 namespace RazChat.Server
 {
@@ -22,7 +23,6 @@ namespace RazChat.Server
 		public static void Main (string[] args)
 		{
 			Console.Title = "Raz Chat Server " + Version;
-			Console.SetWindowSize(128, 64);
 
 			Config.Load();
 
@@ -66,14 +66,40 @@ namespace RazChat.Server
 		}
 
 		internal static void SendUniqueName(Client pClient) {
-			Packet packet = new Packet(EOpcode.SMSG_UPDATE_USERNAME);
-			packet.WriteString ("user_" + pClient.Identifier);
-			pClient.SendPacket (packet);
+
+			int counter = pClient.Identifier;
+
+			// Ensure the new user has a unique name
+			while(sClients.Any (c => c.Username.Equals ("user_" + counter, StringComparison.CurrentCulture))) {
+				counter++;
+			}
+
+			UpdateUsername (pClient, "user_" + counter);
 		}
 
 		internal static void SendWelcomeMessage(Client pClient) {
 			Packet packet = new Packet(EOpcode.SMSG_WELCOME_MESSAGE);
 			packet.WriteString (Config.Instance.WelcomeMessage);
+			pClient.SendPacket (packet);
+		}
+
+		internal static void UpdateUsername(Client pClient, string pUsername) {
+
+			bool success = true;
+			if (sClients.Any (c => c.Username.Equals (pUsername, StringComparison.CurrentCulture))) {
+				success = false;
+			}
+
+			Packet packet = new Packet(EOpcode.SMSG_UPDATE_USERNAME);
+			packet.WriteBool (success);
+
+			if (success) {
+				packet.WriteString (pUsername);
+				pClient.Username = pUsername;
+			}
+
+			Log.WriteLine (ELogLevel.Info, "Sending Uusername: {0}", pUsername);
+
 			pClient.SendPacket (packet);
 		}
 
@@ -100,6 +126,7 @@ namespace RazChat.Server
 		{
 			try {
 				if (pArguments.SocketError == SocketError.Success) {
+
 					Client client = new Client (pArguments.AcceptSocket, sClientIdCounter);
 					sClientIdCounter++;
 
